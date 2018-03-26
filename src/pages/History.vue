@@ -5,7 +5,8 @@
         tabbar-id="infinite-scroll-tabbar"
         style="width: 200px"
       >
-
+        <button>Load More Contact</button>
+        <button>Lazy Repeat</button>
       </v-ons-segment>
     </custom-toolbar>
 
@@ -19,8 +20,8 @@
           </p>
 
           <v-ons-list>
-            <v-ons-list-item v-for="item in getContacts" :key="item">
-              {{ item.firstName }} {{ item.lastName }}
+            <v-ons-list-item v-for="item in history" :key="item">
+              Item #{{ item }}
             </v-ons-list-item>
           </v-ons-list>
 
@@ -41,8 +42,8 @@
         </v-ons-page>
       </template>
 
-      <v-ons-tab label="Load More" active></v-ons-tab>
-      <v-ons-tab label="Lazy Repeat"></v-ons-tab>
+      <v-ons-tab label="Load More"></v-ons-tab>
+      <v-ons-tab label="Lazy Repeat" active></v-ons-tab>
     </v-ons-tabbar>
 
   </v-ons-page>
@@ -50,13 +51,11 @@
 
 <script>
 import Vue from 'vue';
-import { mapState, mapGetters } from 'vuex'
 
 export default {
   data() {
     return {
-      list: [],
-      showdata: 'all'
+      list: []
     };
   },
   beforeMount() {
@@ -90,17 +89,19 @@ export default {
     }
   },
   computed: {
-    // ...mapGetters(['mystate']),
-    getContacts () {
-      if (this.showdata === 'all') {
-        // console.log(this.$store.state.contacts)
-        // this.list = this.$store.state.navigator.contacts
-        return this.$store.state.navigator.contacts
-      } else if (this.showdata === 'favorites') {
-        return this.$store.state.navigator.contacts // this.$store.state.vux.contacts.filter(note => note.direction === 'incoming')
+    getCallLogs () {
+      if (this.$store.state.historyFilterSelection === 'All Call') {
+        console.log(this.$store.state.navigator.history)
+        return this.$store.state.navigator.history
+      } else if (this.$store.state.historyFilterSelection === 'Incoming Call') {
+        return this.$store.state.navigator.history.filter(note => note.direction === 'incoming')
+      } else if (this.$store.state.historyFilterSelection === 'Outgoing Call') {
+        return this.$store.state.navigator.history.filter(note => note.direction === 'outgoing')
+      } else if (this.$store.state.historyFilterSelection === 'Missed Call') {
+        return this.$store.state.navigator.history.filter(note => note.direction === 'missed')
       }
     }
-  },  
+  }  
 };
 </script>
 

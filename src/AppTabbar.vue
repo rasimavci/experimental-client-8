@@ -28,6 +28,7 @@ import Forms from './pages/Forms.vue';
 import Animations from './pages/Animations.vue';
 import Contacts from './pages/Contacts.vue';
 import Dialpad from './pages/Dialpad.vue';
+import Settings from './pages/Settings.vue';
 
 // Just a linear interpolation formula
 const lerp = (x0, x1, t) => parseInt((1 - t) * x0 + t * x1, 10);
@@ -82,8 +83,19 @@ export default {
           icon: this.md ? null : 'comments',
           page: Contacts,
           theme: purple
-        }                          
-      
+        },
+        {
+          label: 'Dialpad',
+          icon: this.md ? null : 'comments',
+          page: Dialpad,
+          theme: purple
+        },
+        {
+          label: 'Settings',
+          icon: this.md ? null : 'comments',
+          page: Settings,
+          theme: purple
+        }                 
       ]
     };
   },

@@ -1,8 +1,10 @@
 <template>
   <v-ons-page>
     <p class="intro">
-      This is a kitchen sink example that shows off the Vue bindings for Onsen UI.<br><br>
+      Welcome to Smart Office demo that shows off the Vue bindings for Onsen UI.<br><br>
     </p>
+
+ <button @click="connect()">Connect</button>
 
     <v-ons-card v-for="page of pages" :key="page.label"
       @click="push(page.component, page.label)"
@@ -72,8 +74,13 @@ export default {
           }
         }
       });
+    },
+    connect() {
+      var credentials = {username: 'ravci@genband.com', password: 'yjke9884'}
+      this.$store.dispatch('navigator/connect', credentials)      
     }
-  }
+  },
+
 };
 </script>
 
