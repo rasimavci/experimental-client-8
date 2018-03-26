@@ -26,6 +26,11 @@ import InfiniteScroll from './InfiniteScroll.vue';
 import Progress from './Progress.vue';
 
 export default {
+  created: function () {
+    console.log('showPlacement value ')
+    this.$store.dispatch('navigator/updateCurrentPage', 'home')
+    // this.$store.dispatch('updateShowPlacement', 'right')
+  },  
   data () {
     return {
       pages: [

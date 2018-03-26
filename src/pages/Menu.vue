@@ -1,7 +1,7 @@
 <template>
   <v-ons-page modifier="white">
     <div class="profile-pic">
-      <img src="../assets/vue-onsenui.png">
+      <img src="../assets/kandylogo.png">
     </div>
 
     <v-ons-list-title>Access</v-ons-list-title>
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
 export default {
   methods: {
     loadView(index) {
@@ -57,29 +58,9 @@ export default {
     return {
       links: [
         {
-          title: 'Docs',
-          icon: 'ion-document-text',
+          title: 'Settings',
+          icon: 'cog',
           url: 'https://onsen.io/v2/docs/guide/vue/'
-        },
-        {
-          title: 'Github',
-          icon: 'ion-social-github',
-          url: 'https://github.com/OnsenUI/OnsenUI'
-        },
-        {
-          title: 'Code',
-          icon: 'ion-code',
-          url: 'https://github.com/OnsenUI/vue-onsenui-kitchensink'
-        },
-        {
-          title: 'Forum',
-          icon: 'ion-chatboxes',
-          url: 'https://community.onsen.io/'
-        },
-        {
-          title: 'Twitter',
-          icon: 'ion-social-twitter',
-          url: 'https://twitter.com/Onsen_UI'
         }
       ],
       access: [
@@ -120,8 +101,8 @@ export default {
           icon: 'list, material: md-movie-alt'
         },
         {
-          title: 'Settings',
-          icon: 'cog, material: md-movie-alt'
+          title: 'Collaboration',
+          icon: 'ion-document-text, material: md-movie-alt'
         }                     
       ]
     };

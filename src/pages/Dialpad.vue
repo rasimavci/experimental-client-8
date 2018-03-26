@@ -2,9 +2,16 @@
  <v-ons-page>
   <div id='dialpad'>
 
-    <div class='modal-container' display='none'>
-      <div class='input-group flex1' v-show='!activeCallRinging'>
-        <input type='text' class='form-control' v-model='callee' placeholder='Username or Number...'>
+    <div class='modal-container1'>
+      <div class='input-group flex1' v-show="activeCall.state !== 'RINGING'">
+        <label class="center">
+          <v-ons-input float maxlength="20"
+            placeholder="Enter a name or Number..."
+            v-model="name"
+          >
+          </v-ons-input>
+        </label>
+
         <span class='input-group-btn'>
           <button class='backspace-button' type='button' @click="callee = ''">
             <i class='material-icons'></i>
@@ -12,9 +19,13 @@
 
           </button>
         </span>
-      </div>
+      </div>      
+      <div class='modal-container2'>
+        </div>
+    <div class='modal-container' display='none'>
 
-      <div align='center' class='h3' v-show='activeCallRinging || activeCallExist'>
+
+      <div align='center' class='h3' v-show="activeCall.state !== 'RINGING'">
         <h3>
           {{activeCallState}}
         </h3>
@@ -22,7 +33,7 @@
         <img class='media-object pull-center' :src='user'/>
       </div>
       <div class='keypad' >
-        <div class='keypad-container' v-show='!activeCallExist  && !activeCallRinging'>
+        <div class='keypad-container' v-show="activeCall.state !== 'RINGING'">
           <div>
             <button class='button' @click='press(1)'>
               <div class='keypad-button-number'>1</div>
@@ -94,7 +105,7 @@
           </div>
         </div>
       </div>
-
+    </div>
     </div>
 
    </div>
@@ -111,10 +122,9 @@ import { mapState } from 'vuex'
 export default {
   name: 'modalNewCall',
   created: function () {
-  //  this.onPlacementChange('right')
     console.log('showPlacement value ')
-    this.$store.dispatch('updateCurrentPage', 'dialpad')
-    this.$store.dispatch('updateShowPlacement', 'right')
+    this.$store.dispatch('navigator/updateCurrentPage', 'dialpad')
+    // this.$store.dispatch('updateShowPlacement', 'right')
   },
   data () {
     return {
@@ -144,12 +154,12 @@ export default {
   },
 
   computed: mapState({
-    user: state => state.user,
-    activeCall: state => state.vux.activeCall,
-    callstart: state => state.callstart,
+    user: state => state.navigator.user,
+    activeCall: state => state.navigator.activeCall,
+    callstart: state => state.navigator.callstart,
     // callState: state => { if(callState === 'RINGING') { return true } else {return false}},
-    isloadingComplete: state => state.isloadingComplete,
-    busy: state => state.busy
+    isloadingComplete: state => state.navigator.isloadingComplete,
+    busy: state => state.navigator.busy
   }),
   components: {
   },
@@ -380,13 +390,27 @@ export default {
   transition: opacity 0.3s ease;
 }
 
-.modal-container {
-  width: 300px;
-  margin: 40px auto 0;
+.modal-container1 {
+  width: 430px;
+  height: 930px;
   padding: 20px 30px;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-container2 {
+  padding-top: 470px;
+}
+
+
+.modal-container {
+  width: 430px;
+  background-color: #fff;
+  border-radius: 0px;
+  box-shadow: 0;
   transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
@@ -421,11 +445,12 @@ export default {
 
 .keypad-container {
   overflow: hidden;
-  border: 0px solid black;
+  border: 0px
 }
 
 .keypad-container div {
   width: 100%;
+  border: 0px
 }
 
 .keypad-container div button {

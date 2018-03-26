@@ -26,7 +26,7 @@ var store = new Vuex.Store({
       state: {
         stack: [],
         options: {},
-        currentPage: 'main',
+        currentPage: 'home',
         callstart: '',
         activeCall: { state: '', id: '',mediaState: '',muted: '' },
         user: {},
@@ -65,7 +65,11 @@ var store = new Vuex.Store({
               state.activeCall = call
             }
           })
-        },                        
+        },
+        UPDATE_CURRENTPAGE (state, payload) {
+          console.log('mutated with ' + payload.top)
+          state.currentPage = payload.top
+        },                           
         push(state, page) {
           state.stack.push(page);
         },
@@ -127,7 +131,11 @@ var store = new Vuex.Store({
           //     kandy.call.end(this.state.vux.activeCall.id)
           //   }
           // })
-        },        
+        },       
+        updateCurrentPage ({commit}, top) {
+          console.log('dispatching updateCurrentPage with ' + top)
+          commit({type: 'UPDATE_CURRENTPAGE', top: top})
+        },              
       }      
     },
 

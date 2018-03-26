@@ -9,7 +9,7 @@
       </v-ons-toolbar-button>
     </custom-toolbar>
 
-    <v-ons-tabbar position="auto"
+    <v-ons-tabbar position="auto" v-if="this.$store.state.navigator.currentPage !== 'dialpad'"
       swipeable
       :modifier="md ? 'autogrow white-content' : null"
       :on-swipe="md ? onSwipe : null"
@@ -18,6 +18,17 @@
       :index.sync="index"
       @postchange="showTip($event, 'Tip: Try swiping pages!')"
     ></v-ons-tabbar>
+
+    <v-ons-tabbar position="auto" v-if="this.$store.state.navigator.currentPage === 'dialpad'"
+      swipeable
+      :modifier="md ? 'autogrow white-content' : null"
+      :on-swipe="md ? onSwipe : null"
+      :tabbar-style="swipeTheme"
+      :tabs="tabs2"
+      :index.sync="index"
+      @postchange="showTip($event, 'Tip: Try swiping pages!')"
+    ></v-ons-tabbar>
+
   </v-ons-page>
 </template>
 
@@ -31,7 +42,8 @@ import Dialpad from './pages/Dialpad.vue';
 import Settings from './pages/Settings.vue';
 import Sessions from './pages/Sessions.vue';
 import History1 from './pages/History.vue';
-
+import Conference from './pages/Conference.vue';
+import { mapState, mapGetters } from 'vuex'
 // Just a linear interpolation formula
 const lerp = (x0, x1, t) => parseInt((1 - t) * x0 + t * x1, 10);
 // RGB colors
@@ -42,6 +54,7 @@ const purple = [103, 58, 183];
 export default {
   data () {
     return {
+      dialpad: false,
       shutUp: !this.md,
       showingTip: false,
       colors: red,
@@ -103,8 +116,38 @@ export default {
           icon: this.md ? null : 'comments',
           page: Sessions,
           theme: purple
-        }                         
-      ]
+        },
+        {
+          // label: 'Conference',
+         //  icon: this.md ? null : 'comments',
+          page: Conference
+         //  theme: purple
+        }                               
+      ],
+      tabs2: [
+        {
+          icon: 'ion-camera, material:md-camera',
+          page: Camera,
+          theme: red,
+          style: this.md ? { maxWidth: '60px' } : {},
+          top: -105 // Toolbar + Tabbar heights
+        },
+        {
+          icon: this.md ? null : 'phone-volume',
+          page: Home,
+          theme: red
+        },
+        {
+          icon: this.md ? null : 'camera',
+          page: Forms,
+          theme: blue
+        },
+        {
+          icon: this.md ? null : 'comments',
+          page: Animations,
+          theme: purple
+        }                       
+      ]      
     };
   },
 
@@ -132,10 +175,10 @@ export default {
       }
     }
   },
-
   computed: {
     index: {
       get() {
+        console.log('tabbar index ' +this.$store.state.tabbar.index)
         return this.$store.state.tabbar.index;
       },
       set(newValue) {
@@ -143,7 +186,8 @@ export default {
       }
     },
     title() {
-      return "deneme"
+      console.log('tab title ' + this.tabs[this.index].label)
+      return "denem" //this.tabs2[this.index].label
       // return this.md ? 'Onsen UI' : this.tabs[this.index].title || this.tabs[this.index].label;
     },
     swipeTheme() {
