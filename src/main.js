@@ -56,7 +56,16 @@ var store = new Vuex.Store({
         REFRESH_DIRECTORY (state, data) {
           console.log('data refreshed')
           if (data) state.contacts = data
-        },                
+        },
+        UPDATE_CALLS (state, calls) {
+          console.log('add call if not exist')
+          state.calls = calls
+          calls.forEach(function (call) {
+            if (call.id === state.activeCall.id) {
+              state.activeCall = call
+            }
+          })
+        },                        
         push(state, page) {
           state.stack.push(page);
         },
@@ -92,6 +101,33 @@ var store = new Vuex.Store({
         disconnect ({ commit }) {
           kandy.disconnect()
         },
+        call (params) {
+          const options = {
+            isAudioEnabled: true, // document.getElementById ('isAudioEnabled').checked,
+            isVideoEnabled: false, // document.getElementById ('isVideoEnabled').checked,
+            sendInitialVideo: false, // document.getElementById ('sendInitialVideo').checked,
+            sendScreenShare: false, // document.getElementById ('sendScreenShare').checked,
+            // localVideoContainer: this.$ref.local-container, // document.getElementById('local-container'),
+            // remoteVideoContainer: this.$ref.remote-container //document.getElementById('remote-container')
+            localVideoContainer: document.getElementById('local-container'),
+            remoteVideoContainer: document.getElementById('remote-container')
+          }
+
+          console.log('call to:' + params.callee)
+          params.callee = 'saynaci@genband.com'
+          kandy.call.make(params.callee, options)
+          // commit('SET_ACTIVECALL_STATE', 'IN_CALL')
+          // commit('SET_ACTIVECALL', params)
+        },
+        end ({commit}, callee) {
+          kandy.call.end(this.state.activeCall.id)
+          // const calls = kandy.call.getAll()
+          // calls.forEach(function (call) {
+          //   if (call.id === this.state.vux.activeCall.id) {
+          //     kandy.call.end(this.state.vux.activeCall.id)
+          //   }
+          // })
+        },        
       }      
     },
 
@@ -210,8 +246,12 @@ function addEventListeners () {
 
   kandy.on('contacts:change', params => {
     store.commit('navigator/REFRESH_DIRECTORY', params.contacts)
-    // store.dispatch ('refresh', params.contacts)
   })  
+
+  kandy.on('callHistory:change', params => {
+    let logs = kandy.call.history.get()
+    store.commit('REFRESH_CALLLOGS', logs)
+  })
 
 }
 function isEmpty (obj) {

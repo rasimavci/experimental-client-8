@@ -5,6 +5,8 @@
     </p>
 
  <button @click="connect()">Connect</button>
+ <button @click="call()">Call</button>
+ <button @click="end()">End</button>
 
     <v-ons-card v-for="page of pages" :key="page.label"
       @click="push(page.component, page.label)"
@@ -78,7 +80,14 @@ export default {
     connect() {
       var credentials = {username: 'ravci@genband.com', password: 'yjke9884'}
       this.$store.dispatch('navigator/connect', credentials)      
-    }
+    },
+    call() {
+      var credentials = {callee: 'saynaci@genband.com'}
+      this.$store.dispatch('navigator/call', credentials)      
+    },
+    end() {
+      this.$store.dispatch('navigator/end')      
+    }           
   },
 
 };

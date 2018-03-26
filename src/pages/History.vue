@@ -20,8 +20,8 @@
           </p>
 
           <v-ons-list>
-            <v-ons-list-item v-for="item in history" :key="item">
-              Item #{{ item }}
+            <v-ons-list-item v-for="logrecord in getCallLogs" :key="logrecord">
+               {{logrecord.callerName}} {{logrecord.startTime.trim ().substring (0, 4)}}
             </v-ons-list-item>
           </v-ons-list>
 
@@ -42,8 +42,8 @@
         </v-ons-page>
       </template>
 
-      <v-ons-tab label="Load More"></v-ons-tab>
-      <v-ons-tab label="Lazy Repeat" active></v-ons-tab>
+      <v-ons-tab label="Load More" active></v-ons-tab>
+      <v-ons-tab label="Lazy Repeat"></v-ons-tab>
     </v-ons-tabbar>
 
   </v-ons-page>
@@ -51,7 +51,7 @@
 
 <script>
 import Vue from 'vue';
-
+import { mapState, mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -90,16 +90,17 @@ export default {
   },
   computed: {
     getCallLogs () {
-      if (this.$store.state.historyFilterSelection === 'All Call') {
-        console.log(this.$store.state.navigator.history)
-        return this.$store.state.navigator.history
-      } else if (this.$store.state.historyFilterSelection === 'Incoming Call') {
-        return this.$store.state.navigator.history.filter(note => note.direction === 'incoming')
-      } else if (this.$store.state.historyFilterSelection === 'Outgoing Call') {
-        return this.$store.state.navigator.history.filter(note => note.direction === 'outgoing')
-      } else if (this.$store.state.historyFilterSelection === 'Missed Call') {
-        return this.$store.state.navigator.history.filter(note => note.direction === 'missed')
-      }
+      return this.$store.state.navigator.history
+      // if (this.$store.state.historyFilterSelection === 'All Call') {
+      //   console.log(this.$store.state.navigator.history)
+      //   return this.$store.state.navigator.history
+      // } else if (this.$store.state.historyFilterSelection === 'Incoming Call') {
+      //   return this.$store.state.navigator.history.filter(note => note.direction === 'incoming')
+      // } else if (this.$store.state.historyFilterSelection === 'Outgoing Call') {
+      //   return this.$store.state.navigator.history.filter(note => note.direction === 'outgoing')
+      // } else if (this.$store.state.historyFilterSelection === 'Missed Call') {
+      //   return this.$store.state.navigator.history.filter(note => note.direction === 'missed')
+      // }
     }
   }  
 };
